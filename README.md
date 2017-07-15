@@ -27,12 +27,12 @@ INPUT: values provided by the simulator to the c++ program
 
 OUTPUT: values provided by the c++ program to the simulator
 
-["estimate_x"] <= kalman filter estimated position x
-["estimate_y"] <= kalman filter estimated position y
-["rmse_x"]
-["rmse_y"]
-["rmse_vx"]
-["rmse_vy"]
+["estimate_x"] <= kalman filter estimated position x  
+["estimate_y"] <= kalman filter estimated position y  
+["rmse_x"]  
+["rmse_y"]  
+["rmse_vx"]  
+["rmse_vy"]  
 
 ---
 
@@ -66,38 +66,42 @@ these recommendations were followed in the new code.
 
 [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html) was adhered to as much as possible.
 
+---
+
 ## Project Rubric
 
 To pass this assignment, the final project must meet certain criteria as defined int he Project Ruberic.  I will go through those items individually, addressing each in turn.
 
-# Code must compile without errors with cmake and make.
+### Code must compile without errors with cmake and make.
 
 The project code does compile with cmake and make, using Docker and the Term 2 Ubuntu 16.04 environment provided by Udacity.
 
-# Your px, py, vx, and vy RMSE should be less than or equal to the values [.09, .10, .40, .30].
+### Your px, py, vx, and vy RMSE should be less than or equal to the values [.09, .10, .40, .30].
 
 The project returns px = 0.0688, py = 0.0826, vx = 0.3367, and vy = 0.2188, meeting this requirement.
 <img src='T2P2_success.png' width="480" alt="Successful project measurements"/>
 
-# Your Sensor Fusion algorithm follows the general processing flow as taught in the preceding lessons.
+### Your Sensor Fusion algorithm follows the general processing flow as taught in the preceding lessons.
 
 The project follows the process laid out in the preceeding lessons, using the code from the exercises as was possible.
 
-# Your Kalman Filter algorithm handles the first measurements appropriately.
+### Your Kalman Filter algorithm handles the first measurements appropriately.
 
 The filter initializes with either lidar or radar data, depending on which type in received first.  Both Lidar and Radar data are handled appropriately.
 
-# Your Kalman Filter algorithm first predicts then updates.
+### Your Kalman Filter algorithm first predicts then updates.
 
 As per the process described in the lectures (and the opposite of the intial provided code, which does the opposite), the Kalman filter her predicts first, then updates.
 
-# Your Kalman Filter can handle radar and lidar measurements.
+### Your Kalman Filter can handle radar and lidar measurements.
 
 The code is designed to update based on either radar and lidar input, and has been tested with just lidar, just radar, and with both input types.  The combined input type showed the best end results.
 
-# Your algorithm should avoid unnecessary calculations.
+## Your algorithm should avoid unnecessary calculations.
 
 The code breaks out angle normalization to a callable method, rather than repeating the same process multiple times and the initial code did.  It also pre-calculates and reuses indepentant values where possible to save time.
+
+---
 
 ## Analysis
 
