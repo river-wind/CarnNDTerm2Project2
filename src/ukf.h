@@ -67,6 +67,11 @@ public:
   ///* Sigma point spreading parameter
   double lambda_;
 
+  ///* the current NIS for radar
+  double NIS_radar_;
+
+  ///* the current NIS for laser
+  double NIS_lidar_;
 
   /**
    * Constructor
@@ -83,6 +88,9 @@ public:
    * @param meas_package The latest measurement data of either radar or laser
    */
   void ProcessMeasurement(MeasurementPackage meas_package);
+
+  //CEL: normalize the angles
+  double NormalizeAngle(double& angle);
 
   /**
    * Prediction Predicts sigma points, the state, and the state covariance
