@@ -105,7 +105,7 @@ The code breaks out angle normalization to a callable method, rather than repeat
 
 ## Analysis
 
-The Unscented Kalman Filter does an excellent job of prediction position and handling noise, without the need for a Jacobian step like the Extended Kalmann Filter.  After running the completed code with just lidar:
+The Unscented Kalman Filter does an excellent job of prediction position and handling noise, returning lower RMSE values than the EKF, without the need for a Jacobian step like the Extended Kalmann Filter.  After running the completed code with just lidar:
 
 <img src="T2P2_lidar.png" width="480" alt="lidar only"/>
 
