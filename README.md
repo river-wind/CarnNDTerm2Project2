@@ -36,13 +36,13 @@ OUTPUT: values provided by the c++ program to the simulator
 
 ---
 
-## Other Important Dependencies
+### Other Important Dependencies
 
 * cmake >= v3.5
 * make >= v4.1
 * gcc/g++ >= v5.4
 
-## Basic Build Instructions
+### Basic Build Instructions
 
 1. Clone this repo.
 2. Make a build directory: `mkdir build && cd build`
@@ -51,7 +51,7 @@ OUTPUT: values provided by the c++ program to the simulator
    some sample inputs in 'data/'.
     - eg. `./UnscentedKF ../data/obj_pose-laser-radar-synthetic-input.txt`
 
-## Editor Settings
+### Editor Settings
 
 The Udacity team purposefully kept editor configuration files out of this repo in order to
 keep it as simple and environment agnostic as possible. However, they recommend
@@ -62,7 +62,7 @@ using the following settings:
 
 these recommendations were followed in the new code.
 
-## Code Style
+### Code Style
 
 [Google's C++ style guide](https://google.github.io/styleguide/cppguide.html) was adhered to as much as possible.
 
@@ -97,7 +97,7 @@ As per the process described in the lectures (and the opposite of the intial pro
 
 The code is designed to update based on either radar and lidar input, and has been tested with just lidar, just radar, and with both input types.  The combined input type showed the best end results.
 
-## Your algorithm should avoid unnecessary calculations.
+### Your algorithm should avoid unnecessary calculations.
 
 The code breaks out angle normalization to a callable method, rather than repeating the same process multiple times and the initial code did.  It also pre-calculates and reuses indepentant values where possible to save time.
 
