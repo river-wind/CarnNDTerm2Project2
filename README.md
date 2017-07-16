@@ -83,7 +83,7 @@ The project returns px = 0.0688, py = 0.0826, vx = 0.3367, and vy = 0.2188, meet
 
 ### Your Sensor Fusion algorithm follows the general processing flow as taught in the preceding lessons.
 
-The project follows the process laid out in the preceeding lessons, using the code from the exercises as was possible.
+The project follows the process laid out in the preceeding lessons, using the code from the exercises as was possible.  The code had to be updated to handle the specifics of this project, but the general code structure follows the lesson frameworks.
 
 ### Your Kalman Filter algorithm handles the first measurements appropriately.
 
@@ -91,7 +91,7 @@ The filter initializes with either lidar or radar data, depending on which type 
 
 ### Your Kalman Filter algorithm first predicts then updates.
 
-As per the process described in the lectures (and the opposite of the intial provided code, which does the opposite), the Kalman filter her predicts first, then updates.
+As per the process described in the lectures (and the opposite of the intial provided code, which does the opposite), the Kalman Filter here predicts first, then updates.
 
 ### Your Kalman Filter can handle radar and lidar measurements.
 
@@ -99,13 +99,13 @@ The code is designed to update based on either radar and lidar input, and has be
 
 ### Your algorithm should avoid unnecessary calculations.
 
-The code breaks out angle normalization to a callable method, rather than repeating the same process multiple times and the initial code did.  It also pre-calculates and reuses indepentant values where possible to save time.
+The code breaks out angle normalization to a callable method, rather than repeating the same process multiple times as the initial code did.  It also pre-calculates and reuses indepentant values where possible to save time.
 
 ---
 
 ## Analysis
 
-The Unscented Kalman Filter does an excellent job of prediction position and handling noise, returning lower RMSE values than the EKF, without the need for a Jacobian step like the Extended Kalmann Filter.  After running the completed code with just lidar:
+The Unscented Kalman Filter does an excellent job of prediction position and handling input noise, returning lower RMSE values than the Extended Kalmann Filter, without the need for a Jacobian step.  After running the completed code with just lidar:
 
 <img src="T2P2_lidar.png" width="480" alt="lidar only"/>
 
@@ -117,14 +117,14 @@ it is clear that combining both data sets is advantagious.  By using sigma point
 
 ### Bonus problem: Run Away Car
 
-I attempted to use the existing UKF against the run-away problem as well.  This problem is included in the Simulator as an optional problem, requiring a different starting code set.  I downloaded the started code from Github, and replaced the provided ukf.cpp and ukf.h files with the ukf.cpp, ukf.h, tools.cpp, and tools.h files from this project.  The code worked as a drop-in replacement, and after building the Run-Away Car code and running it against the simulator, I saw good object tracking, and the chase car cut the circle to track down the run away vehicle.
+I attempted to use the existing UKF against the run-away problem as well.  This problem is included in the Simulator as an optional problem, requiring a different starting code set.  I downloaded the starting code from Github, and replaced the provided ukf.cpp and ukf.h files with the ukf.cpp, ukf.h, tools.cpp, and tools.h files from this project.  The code worked as a drop-in replacement, and after building the Run-Away Car code and running it against the simulator, I saw good object tracking, with the chase car cutting the circle to track down the run away vehicle.
 <img src="T2P2_RunAwayCar2.png" width="480" alt="Run Away Car 1"/>
 
 However, after the chase car got close to the target vehicle, it fell in behind and simply followed, not going fast enough to catch up before the available 30 second time limit ran out.  The UKF tracking of the target vehicle seems spot on, but it was driving to where the car *was now*, rather than driving towards where the car *would be* a second in the future.  
 
 <img src="T2P2_RunAwayCar.png" width="480" alt="Run Away Car 2"/>
 
-The chase car did manage to get close, overlapping with the target vehicle, but without either more speed or a projected target location ahead of the vehicle we're trying to catch (thus cutting the angle of the circle and taking a shorting route), it is unlikely it would ever catch up.  I did attempt to adjust the initial starting parameters to see if they would impact the result, but they did not appear to.  The tracking of the car was accurate enough with the initial UKF code; the chase car dutifully follows the target without apparent issue.  Looking at the main.cpp code, the heading_difference and distance_difference variablees appear to be key to controlling the chase car, called "hunter". 
+The chase car did manage to get close, overlapping with the target vehicle, but without either more speed or a projected target location ahead of the vehicle we're trying to catch (thus cutting the angle of the circle and taking a shorting route), it is unlikely it would ever catch up.  I did attempt to adjust the initial starting parameters of the UKF to see if they would impact the result, but they did not appear to.  The tracking of the car was accurate enough with the initial UKF code; the chase car dutifully follows the target without apparent issue.  Looking at the main.cpp code, the heading_difference and distance_difference variablees appear to be key to controlling the chase car, called "hunter". 
 
 <img src="T2P2_RunAwayCar3.png" width="480" alt="Run Away Car 3"/>
 
@@ -132,10 +132,10 @@ I altered main.cpp, changing the heading_difference variable to be increased by 
 
 <img src="T2P2_RunAwayCar4.png" width="480" alt="Run Away Car 4"/>
 
-However, increasing it this high had side effects.  Once the hunter had nearly cuaght the target car, it had a habit of going into a spinning fit, staying on place and spinning around in circles for a few seconds befor giving chase again.  Most of this time, this version of the project failed, nearly catching the car right away, followed by spinning, then nearly catching the car, spinning, etc.  I was thinking that the simulator itself might not have been working, as it was not clear what measure was being used to count as "catching" the target car.  The two vehicles overlapped on-screen nearly 90%; in real life that would qualify as having caught the target car; they would both have run off the road into a ditch at that point.
+However, increasing it this high had side effects.  Once the hunter had nearly cuaght the target car, it had a habit of going into a spinning fit, staying in one place and spinning around in circles for a few seconds befor giving chase again.  Most of the time, this version of the project failed, nearly catching the car right away, followed by spinning, then nearly catching the car, spinning, etc.  I was thinking that the simulator itself might not have been working, as it was not clear what measure was being used to count as "catching" the target car.  The two vehicles overlapped on-screen nearly 90%; in real life that would qualify as having caught the target car since they would have collided at that point.  A simple rectangular bounding box collision detection method would work well here.
 
-But while running the code over and over again to take screenshots for this writeup, the hunter actually managed to catch the target, on the first circle, no less.
+But while running the code over and over again to take screenshots for this writeup, the hunter actually managed to catch the target once (distance to target = 0.0010), on the first circle, no less.
 
 <img src="T2P2_RunAwayCar6.png" width="480" alt="Run Away Car Caught!"/>
 
-I still suspect there is a much better way of doing this, and fixing the spinning issue, though I'm not away of how to approach that at this time.
+I still suspect there is a much better way of doing this, one which would fix the spinning issue, though I'm not away of how to approach that at this time.
