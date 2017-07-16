@@ -114,3 +114,28 @@ and with just radar:
 <img src="T2P2_radar.png" width="480" alt="radar only"/>
 
 it is clear that combining both data sets is advantagious.  By using sigma points to project the non-linear results of the Unscented Kalman fiter back to measurement space, we get a very good aproximation of a gaussian result, without being limited to linear functions only.
+
+### Bonus problem: Run Away Car
+
+I attempted to use the existing UKF against the run-away problem as well.  This problem is included in the Simulator as an optional problem, requiring a different starting code set.  I downloaded the started code from Github, and replaced the provided ukf.cpp and ukf.h files with the ukf.cpp, ukf.h, tools.cpp, and tools.h files from this project.  The code worked as a drop-in replacement, and after building the Run-Away Car code and running it against the simulator, I saw good object tracking, and the chase car cut the circle to track down the run away vehicle.
+<img src="T2P2_RunAwayCar2.png" width="480" alt="Run Away Car 1"/>
+
+However, after the chase car got close to the target vehicle, it fell in behind and simply followed, not going fast enough to catch up before the available 30 second time limit ran out.  The UKF tracking of the target vehicle seems spot on, but it was driving to where the car *was now*, rather than driving towards where the car *would be* a second in the future.  
+
+<img src="T2P2_RunAwayCar.png" width="480" alt="Run Away Car 2"/>
+
+The chase car did manage to get close, overlapping with the target vehicle, but without either more speed or a projected target location ahead of the vehicle we're trying to catch (thus cutting the angle of the circle and taking a shorting route), it is unlikely it would ever catch up.  I did attempt to adjust the initial starting parameters to see if they would impact the result, but they did not appear to.  The tracking of the car was accurate enough with the initial UKF code; the chase car dutifully follows the target without apparent issue.  Looking at the main.cpp code, the heading_difference and distance_difference variablees appear to be key to controlling the chase car, called "hunter". 
+
+<img src="T2P2_RunAwayCar3.png" width="480" alt="Run Away Car 3"/>
+
+I altered main.cpp, changing the heading_difference variable to be increased by .75 over the simple difference between the heading_to_target and hunter_heading variables.  This caused the chase car to significantly increase it's starting angle, and effectively cause the target car righ away, cutting the distance to the target to <0.3 on the first circle.
+
+<img src="T2P2_RunAwayCar4.png" width="480" alt="Run Away Car 4"/>
+
+However, increasing it this high had side effects.  Once the hunter had nearly cuaght the target car, it had a habit of going into a spinning fit, staying on place and spinning around in circles for a few seconds befor giving chase again.  Most of this time, this version of the project failed, nearly catching the car right away, followed by spinning, then nearly catching the car, spinning, etc.  I was thinking that the simulator itself might not have been working, as it was not clear what measure was being used to count as "catching" the target car.  The two vehicles overlapped on-screen nearly 90%; in real life that would qualify as having caught the target car; they would both have run off the road into a ditch at that point.
+
+But while running the code over and over again to take screenshots for this writeup, the hunter actually managed to catch the target, on the first circle, no less.
+
+<img src="T2P2_RunAwayCar6.png" width="480" alt="Run Away Car Caught!"/>
+
+I still suspect there is a much better way of doing this, and fixing the spinning issue, though I'm not away of how to approach that at this time.
